@@ -3,33 +3,30 @@
 #include <stdbool.h>
 
 
-#define MAX 100 
+#define MAX 3 
 
 int opening();
-void coeff_a(double *arr, int index);
-void coeff_b(double *brr, int index);
-void coeff_c(double *crr, int index);
-void solution(double *arr, double *brr, double *crr, int index);
+void read_coeff(double *arr, int index);
+
+void print_solution(double *arr,  int index);
 
 int main() 
 {
-    int s = 1;
-    int p = 0;
+    
+    
     int count = 0;
     double arr[MAX];
-    double brr[MAX];
-    double crr[MAX];
+    
     bool want = true ;
 
     while(want){
-        s = opening();
-        if(s == 1){
+        want = opening();
+        if(want){
         printf("задайте коэффиценты квадратного уравнения вида: ax^2 + bx + c = 0\n");
-        coeff_a(arr, count);
-        coeff_b(brr, count);
-        coeff_c(crr, count);
-        solution(arr, brr, crr, count);
-        count++ ;
+        read_coeff(arr, count);
+        
+        print_solution(arr, count);
+        
         }else{
             want = false ;
         }
@@ -48,25 +45,21 @@ int opening()
     }
 }
 
-void coeff_a(double *arr, int index){
+void read_coeff(double *arr, int index){
     printf("напишите значение коэффицента перед х^2\n");
     scanf("%lf", &arr[index]);
-}
-
-void coeff_b(double *brr, int index){
     printf("напишите значение коэффицента перед х\n");
-    scanf("%lf", &brr[index]);
-}
-
-void coeff_c(double *crr, int index){
+    scanf("%lf", &arr[index+1]);
     printf("напишите значение свободного коэффицента \n");
-    scanf("%lf", &crr[index]);
+    scanf("%lf", &arr[index+2]);
 }
 
-void solution(double *arr, double *brr, double *crr, int index){
+
+
+void print_solution(double *arr,  int index){
     double a = arr[index];
-    double b = brr[index];
-    double c = crr[index];
+    double b = arr[index+1];
+    double c = arr[index+2];
     double D = b*b - 4*a*c;
     if (D > 0 ){
         printf("корни уравнения: %lf %lf\n", (-b+sqrt(D)/(2*a)), (-b-sqrt(D)/(2*a)));
@@ -74,5 +67,8 @@ void solution(double *arr, double *brr, double *crr, int index){
         printf("корень уравнения: %lf\n", -b/(2*a));
     } else{
         printf("нет корней\n");
+    }
+    for(int i = 0; i < 3; i++){
+        arr[i] = 0; 
     }
 }
