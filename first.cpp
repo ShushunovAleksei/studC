@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
+
 
 #define MAX 100 
 
@@ -17,8 +19,9 @@ int main()
     double arr[MAX];
     double brr[MAX];
     double crr[MAX];
+    bool want = true ;
 
-    while(s == 1){
+    while(want){
         s = opening();
         if(s == 1){
         printf("задайте коэффиценты квадратного уравнения вида: ax^2 + bx + c = 0\n");
@@ -27,6 +30,8 @@ int main()
         coeff_c(crr, count);
         solution(arr, brr, crr, count);
         count++ ;
+        }else{
+            want = false ;
         }
     }
 }
