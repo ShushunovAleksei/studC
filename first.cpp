@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 
-#define MAX 3 
+
 enum coefficents {
     COEFF_A = 0,
     COEFF_B = 1,
@@ -14,37 +14,41 @@ enum coefficents {
 };
 
 enum condition {
-    TWO_SOL = 1,
-    ONE_SOL = 0,
+    TWO_SOL = 2,
+    ONE_SOL = 1,
     NO_SOL = -1,
+    correct_inp = 3,
+    incorrect_inp = 0
 };
 
 int programm_opening();
-void read_coeff(double *arr);
-bool read_valid_number(double *arr, const char *promt);
+enum condition read_coeff(double *arr);
+enum condition read_valid_number(double *arr, const char *promt);
 enum condition solve_equation(double *arr,  double *x1, double *x2);
 void print_solution(double x1, double x2, enum condition status);
 
 
 
 int main(){
-    double arr[MAX] = {0};
+    double arr[3] = {0};
     double root_solve1, root_solve2;
     root_solve1 = 0;
     root_solve2 = 0;
 
-    bool want_to_solve = true ;
+    bool want_to_solve = programm_opening() ;
 
     while(want_to_solve){
-        want_to_solve = programm_opening();
-        if(want_to_solve){
-            printf("задайте коэффиценты квадратного уравнения вида: ax^2 + bx + c = 0\n");
+        printf("задайте коэффиценты квадратного уравнения вида: ax^2 + bx + c = 0\n");
         
-            read_coeff(arr);
-            enum condition status =  solve_equation(arr, &root_solve1, &root_solve2);
-            print_solution(root_solve1, root_solve2, status);
-        
+        enum condition status = read_coeff(arr);
+
+        if(status == correct_inp){
+            status = solve_equation(arr, &root_solve1, &root_solve2);
         }
+        
+        print_solution(root_solve1, root_solve2, status);
+        
+        want_to_solve = programm_opening();
         }
     
     return 0;
@@ -64,17 +68,20 @@ int programm_opening(){
     }
 }
 
-void read_coeff(double *arr){
+enum condition read_coeff(double *arr){
     const char *promts[3] = {
         "введите коэффицент перед x^2",
         "введите коэффицент перед x",
         "введите свободный коэффицент"
     };
-
+    int status_in_proc;
     for(int i = 0; i < 3; ++i){
-
-        while(!read_valid_number(&arr[i], promts[i]));
+        enum condition status_in_proc = read_valid_number(&arr[i], promts[i]);
+        if(status_in_proc == incorrect_inp){
+        return status_in_proc; 
+        }
     }
+    return correct_inp;
 }
 
 
@@ -109,12 +116,15 @@ void print_solution(double x1, double x2, enum condition status){
             printf("корни уравнения: %lf %lf\n",  x1, x2);
         }else if(status == ONE_SOL){
             printf("корень уравнения: %lf\n", x1);
+        }else if(status == incorrect_inp){
+            printf("некорректный ввод\n");
         }else{
             printf("нет корней\n");
         }
 }
+
         
-bool read_valid_number(double *value,  const char *promt){
+enum condition read_valid_number(double *value,  const char *promt){
     printf("%s\n", promt);
     double number = 0;
     char buffer[100] = {0};
@@ -122,16 +132,16 @@ bool read_valid_number(double *value,  const char *promt){
     fgets(buffer, sizeof(buffer), stdin);
     if(buffer[0] == '\n' || buffer[0] == '\0'){
         printf("пустой ввод\n");
-        return false;
+        return incorrect_inp;
     }else {
         number = strtod(buffer, &endword);
 
         if(*endword != '\0' && *endword != '\n'){
             printf("некорректный ввод\n");
-            return false;
+            return incorrect_inp;
         }
         *value = number;
-        return true;
+        return correct_inp;
     }
 
 
