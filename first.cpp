@@ -19,7 +19,7 @@ enum condition {
     NO_SOL = -1,
 };
 
-int opening();
+int programm_opening();
 void read_coeff(double *arr);
 bool read_valid_number(double *arr, const char *promt);
 enum condition solve_equation(double *arr,  double *x1, double *x2);
@@ -33,11 +33,11 @@ int main(){
     root_solve1 = 0;
     root_solve2 = 0;
 
-    bool want = true ;
+    bool want_to_solve = true ;
 
-    while(want){
-        want = opening();
-        if(want){
+    while(want_to_solve){
+        want_to_solve = programm_opening();
+        if(want_to_solve){
             printf("задайте коэффиценты квадратного уравнения вида: ax^2 + bx + c = 0\n");
         
             read_coeff(arr);
@@ -50,12 +50,12 @@ int main(){
     return 0;
 }
 
-int opening(){
-    char choice = 0;
+int programm_opening(){
+    char user_choice = 0;
     printf("хотите решить квадратное уравнение? (y/n)\n");
-    scanf(" %c", &choice);
+    scanf(" %c", &user_choice);
     
-    if (choice == 'y' || choice == 'Y'){
+    if (user_choice == 'y' || user_choice == 'Y'){
         return 1;
     } else {
         return 0;
@@ -96,13 +96,13 @@ enum condition solve_equation(double *arr, double *x1, double *x2){
 }
 
 void print_solution(double x1, double x2, enum condition status){
-            if(status == TWO_SOL){
-                printf("корни уравнения: %lf %lf\n",  x1, x2);
-            }else if(status == ONE_SOL){
-                printf("корень уравнения: %lf\n", x1);
-            }else{
-                printf("нет корней\n");
-            }
+        if(status == TWO_SOL){
+            printf("корни уравнения: %lf %lf\n",  x1, x2);
+        }else if(status == ONE_SOL){
+            printf("корень уравнения: %lf\n", x1);
+        }else{
+            printf("нет корней\n");
+        }
 }
         
 bool read_valid_number(double *value,  const char *promt){
