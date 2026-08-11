@@ -28,7 +28,7 @@ void print_solution(double x1, double x2, enum condition status);
 
 
 int main(){
-    double arr[MAX];
+    double arr[MAX] = {0};
     double root_solve1, root_solve2;
     root_solve1 = 0;
     root_solve2 = 0;
@@ -54,6 +54,8 @@ int programm_opening(){
     char user_choice = 0;
     printf("хотите решить квадратное уравнение? (y/n)\n");
     scanf(" %c", &user_choice);
+
+    while(getchar() != '\n');
     
     if (user_choice == 'y' || user_choice == 'Y'){
         return 1;
@@ -63,9 +65,16 @@ int programm_opening(){
 }
 
 void read_coeff(double *arr){
-     read_valid_number(&arr[COEFF_A], "введите коэффицент перед x^2");
-     read_valid_number(&arr[COEFF_B], "введите коэффицент перед x");
-     read_valid_number(&arr[COEFF_C], "введите свободный коэффицент");
+    const char *promts[3] = {
+        "введите коэффицент перед x^2",
+        "введите коэффицент перед x",
+        "введите свободный коэффицент"
+    };
+
+    for(int i = 0; i < 3; ++i){
+
+        while(!read_valid_number(&arr[i], promts[i]));
+    }
 }
 
 
@@ -106,32 +115,24 @@ void print_solution(double x1, double x2, enum condition status){
 }
         
 bool read_valid_number(double *value,  const char *promt){
-    char buffer[100] = {0};
-    char *point_to_the_end; 
+    printf("%s\n", promt);
     double number = 0;
-    while(true){
-        printf("%s", promt);
-        fgets(buffer, sizeof(buffer), stdin);
+    char buffer[100] = {0};
+    char *endword;
+    fgets(buffer, sizeof(buffer), stdin);
+    if(buffer[0] == '\n' || buffer[0] == '\0'){
+        printf("пустой ввод\n");
+        return false;
+    }else {
+        number = strtod(buffer, &endword);
 
-        if(buffer[0] == '\0' || buffer[0] == '\n'){
-            printf("пустой ввод\n");
-            continue;
+        if(*endword != '\0' && *endword != '\n'){
+            printf("некорректный ввод\n");
+            return false;
         }
+        *value = number;
+        return true;
+    }
 
-        number = strtod(buffer, &point_to_the_end);
 
-        while(*point_to_the_end != '\0' && *point_to_the_end != '\n'){
-            if(!isspace(*point_to_the_end)){
-                printf("ошибка ввода\n");
-                break;
-            }
-            point_to_the_end++;
-            }
-        if(*point_to_the_end != '\0' || *point_to_the_end != '\n'){
-            
-            continue; 
-        }
-}
-    *value = number;
-    return true;
 }
