@@ -10,11 +10,14 @@ int main(){
     
     printf("введите строку символов\n");
     reading_line(str);
+    int count;
+    count = strlenv2( str);
+    printf("%d\n", count);
 }
 
 int strlenv2( char *line){
     int i ;
-    for( i = 0; line[i] != 0 ; i ++);
+    for( i = 0; line[i] != 0 && line[i] != '\n' ; i ++);
     return i; 
 
 }
