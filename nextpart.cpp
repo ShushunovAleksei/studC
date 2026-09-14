@@ -4,7 +4,7 @@ int strlenv2( char *line);
 void reading_line(char *popa);
 void strppi(char *line1 , char *line2);
 void strcapp(char *line_bfr1, char *line_bfr2, char *line_aftr);
-
+int strcmp2(char *line1, char *line2);
 int main(){
     
     char str[1000] = {};
@@ -50,4 +50,26 @@ void strcapp(char *line_bfr1, char *line_bfr2, char *line_aftr){
         j++ ;
     }
     line_aftr[j] = '\0' ;
+}
+
+int strcmp2(char *line1, char *line2){
+    int i, j;
+    i = 0;
+    j = 0;
+    while(line1[i] == line2[j] && line1[i] != '\0' && line2[j] != '\0'){
+        i++;
+        j++;
+    }
+    int result = 0;
+    result = line1[i] - line2[j] ;
+    if(result > 0){
+        printf("первая строка больше второй\n");
+        return 1;
+    }else if(result < 0){
+        printf("вторая строка больше первой\n");
+        return -1;
+    }else {
+    printf("строки равны\n");
+    return 0;
+    }
 }
